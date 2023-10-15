@@ -67,7 +67,7 @@ test <- wolfcamp_df[split1== 1, ]
 
 table(split1)/length(wolfcamp_df)
 
-
+---
 
 
 
