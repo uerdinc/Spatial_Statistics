@@ -55,3 +55,5 @@ spplot(x2["var1.pred"])
 
 #surface plot can be made using library MBA and mba.surf interpolation
 #mean squared error is a proper score 
+
+
