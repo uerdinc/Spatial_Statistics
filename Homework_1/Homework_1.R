@@ -1,8 +1,19 @@
-library(gstat)
-library(sp)
+#library(gstat)
+#library(sp)
 library(geoR)
 
 data("wolfcamp")
+class(wolfcamp)
+summary(wolfcamp)
+plot(wolfcamp)
+points(wolfcamp)
+
+
+plot(variog(wolfcamp,option="bin"),type="l")
+plot(variog(wolfcamp,option="bin", trend = "1st"),type="l")
+
+
+
 
 wolfcamp_df<-data.frame(wolfcamp)
 class(wolfcamp_df)
