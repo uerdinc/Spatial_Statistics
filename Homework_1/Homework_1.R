@@ -58,14 +58,6 @@ spplot(y4["var1.pred"])
 spplot(y5["var1.pred"])
 
 
-
-library(MBA)
-?mba.surf
-
-?mba.points
-
-data(LIDAR)
-
 ########################
 
 # Divide data into train and test
@@ -78,23 +70,16 @@ test <- wolfcamp_df[split1== 1, ]
 
 table(split1)/length(wolfcamp_df)
 
----
 
 
 
 
-
-
-
-
-
-#multilevel bi-splines 
-#library(gstat)
-#library(automap)
-#wolfcamp_gstat <- gstat(id = "data", formula = data ~ 1, data = wolfcamp_df)
-#wolfcamp_kriged <- autoKrige(wolfcamp_gstat, aq.grid)
-#spplot(wolfcamp_kriged, "var1.pred")
-
+#multilevel bi-splines
+library(MBA)
+wolf<-wolfcamp_df
+mba.surface <- mba.surf(wolf, 300, 300, extend = TRUE)
+mba.est <- mba.surface$xyz.est
+image(mba.est, xaxs = "r", yaxs = "r")
 
 
 
