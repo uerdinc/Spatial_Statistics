@@ -83,7 +83,7 @@ image(mba.est, xaxs = "r", yaxs = "r")
 
 
 
-
+#asdasd
 
 
 
