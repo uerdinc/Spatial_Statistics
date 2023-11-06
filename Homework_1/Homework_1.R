@@ -12,7 +12,7 @@ data("wolfcamp")                  # Calling libraries and wolfcamp dataset
 
 ##### Function for best P -----
 
-wolfcamp_df<-data.frame(wolfcamp) # Converting wolfcamp data to dataframe
+wolfcamp_df<-data.frame(wolfcamp) # Converting wolfcamp data to dataframe format
 coordinates(wolfcamp_df)= ~X1+X2  # Creating coordinates column 
 
 wolfcamp_df$ldata<-log(wolfcamp_df$data) # Calculating log dataset
@@ -39,9 +39,11 @@ best_p<- function(k){             # creating function for best p
   # The p values starts from 1 and continues k times increasing 0.5 each time. 
   # The k value is the function parameter that user input the function 
 
-best_p(5)  # Trial for function with k = 5 --> This mean function check for p values that p = (1, 1.5, 2, 2.5, 3)
-best_p(10) # Trial for function with k = 10 --> This mean function check for p values that p = (1, ...., 5.5)
-# best_p(c) # Trial for function with k = c --> This mean function check for p values that p = (1, ...., 0.5+(c/2))
+best_p(5)  # Trial for function with k = 5 --> This means function check for p values that p = (1, 1.5, 2, 2.5, 3)
+best_p(10) # Trial for function with k = 10 --> This means function check for p values that p = (1, ...., 5.5)
+## best_p(c) # Trial for function with k = c --> This means function check for p values that p = (1, ...., 0.5+(c/2))
+
+# After run the function --> Best p value is equal to 1 for wolfcamp dataset
 
 ##### IDW with 20x20 grid -----
 
@@ -80,6 +82,8 @@ mse_table<-matrix(c(mse_idw_wolfcamp,mse_mba_wolfcamp),ncol=2)  # Creating a tab
 colnames(mse_table)<-c("MSE for IDW","MSE for MBA")             # Giving column names to MSE table
 mse_table
 
+# According to our MSE table, MSE for IDW model is almost equal to 0.0012 and MSE for MBA model is equal to almost 0.19
+# Since MSE for IDW is lower than the MSE for MBA, the IDW model is better than MBA model for wolfcamp dataset
 
 
 
