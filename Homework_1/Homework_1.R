@@ -1,6 +1,7 @@
 library(sp)
 library(gstat)
 library(geoR)
+library(Metrics)
 data("wolfcamp")                  # Calling libraries and wolfcamp dataset
 
 #class(wolfcamp)                  # Checking some information about the dataset 
@@ -23,14 +24,14 @@ gridded(wolfcam_grid) = ~x+y      # Creating grid data set for IDW estimation
 
 best_p<- function(k){             # creating function for best p 
   p = 1                           # starting p = 1 
-  mse_idw_wolfcamp<-numeric()     # creating an empty numeric data set for MSE scores
+  rmse_idw_wolfcamp<-numeric()     # creating an empty numeric data set for MSE scores
   for (i in 1:k) {
     idw_wolfcamp<- idw(ldata~1, wolfcamp_df, wolfcam_grid, idp = p[i]) # creating IDW model for each p value
-    mse_idw_wolfcamp[i]<-mean(idw_wolfcamp$var1.pred-wolfcamp_df$ldata)^2 # calculating MSE scores for each p value
+    rmse_idw_wolfcamp[i]<-rmse(wolfcamp_df$ldata,idw_wolfcamp$var1.pred) # calculating RMSE scores for each p value
     p[i+1] <- p[i]+0.5          # increasing p value for upcoming IDW model
   }
   
-  best_p<-p[which.min(mse_idw_wolfcamp)] # selecting best p value with minimum MSE 
+  best_p<-p[which.min(rmse_idw_wolfcamp)] # selecting best p value with minimum MSE 
   print(paste("Best p value:", best_p))  # printing best p value
 
 } # This function can be only use for wolfcamp dataset. 
@@ -52,7 +53,7 @@ wolfcam_grid_2 <- expand.grid(x = seq(min(wolfcamp$coords[,1]), max(wolfcamp$coo
 gridded(wolfcam_grid_2) = ~x+y            # Creating 20x20 grid dataset for IDW estimation
 
 idw_wolfcamp<- idw(ldata~1, wolfcamp_df, wolfcam_grid_2, idp = 2)   # Implementing IDW model for 20x20 gridded wolfcamp data
-mse_idw_wolfcamp<-mean(idw_wolfcamp$var1.pred-wolfcamp_df$ldata)^2  # Calculating MSE for IDW model
+rmse_idw_wolfcamp<-rmse(wolfcamp_df$ldata,idw_wolfcamp$var1.pred)  # Calculating RMSE for IDW model
 
 ##### Divide data into train and test -----
 
@@ -74,16 +75,16 @@ image(mba_wolfcamp$xyz.est)
 persp(mba_wolfcamp$xyz.est, box = FALSE,phi = -5, theta = 125, ltheta = -125 ,
       expand = 1 ,col = "red", shade = 1.5, border = NA)
 
-mse_mba_wolfcamp<-mean(((log(mba_wolfcamp$xyz.est$z))-(log(test_wolfcamp$data)))^2) # Calculating MSE for MBA model
+rmse_mba_wolfcamp<-rmse(log(mba_wolfcamp$xyz.est$z),log(test_wolfcamp$data)) # Calculating RMSE for MBA model
 
-##### Comparing MSE values -----
+##### Comparing RMSE values -----
 
-mse_table<-matrix(c(mse_idw_wolfcamp,mse_mba_wolfcamp),ncol=2)  # Creating a table for comparing MSE values for each model
-colnames(mse_table)<-c("MSE for IDW","MSE for MBA")             # Giving column names to MSE table
-mse_table
+rmse_table<-matrix(c(rmse_idw_wolfcamp,rmse_mba_wolfcamp),ncol=2)  # Creating a table for comparing RMSE values for each model
+colnames(rmse_table)<-c("RMSE for IDW","RMSE for MBA")             # Giving column names to RMSE table
+rmse_table
 
-# According to our MSE table, MSE for IDW model is almost equal to 0.0012 and MSE for MBA model is equal to almost 0.19
-# Since MSE for IDW is lower than the MSE for MBA, the IDW model is better than MBA model for wolfcamp dataset
+# According to our RMSE table, RMSE for IDW model is almost equal to 0.39 and RMSE for MBA model is equal to almost 0.45
+# Since RMSE for IDW is lower than the RMSE for MBA, the IDW model is better than MBA model for wolfcamp dataset
 
 
 
